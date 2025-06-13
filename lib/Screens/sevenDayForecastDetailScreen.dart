@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/helper/extensions.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
-import 'package:flutter_weather/theme/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';

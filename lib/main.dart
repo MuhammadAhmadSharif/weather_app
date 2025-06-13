@@ -34,11 +34,10 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           colorScheme: ColorScheme.light(
             primary: primaryBlue,
-            background: backgroundWhite,
+            secondary: backgroundWhite,
             surface: backgroundBlue,
           ),
-          textTheme:
-              GoogleFonts.openSansTextTheme().apply(bodyColor: Colors.black),
+          textTheme: GoogleFonts.openSansTextTheme().apply(bodyColor: Colors.black),
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
@@ -52,11 +51,10 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
           colorScheme: ColorScheme.dark(
             primary: primaryBlue,
-            background: Colors.black,
+            secondary: Colors.black,
             surface: Colors.grey.shade800,
           ),
-          textTheme:
-              GoogleFonts.openSansTextTheme().apply(bodyColor: Colors.white),
+          textTheme: GoogleFonts.openSansTextTheme().apply(bodyColor: Colors.white),
         ),
         themeMode: ThemeMode.system,
         home: HomeScreen(),

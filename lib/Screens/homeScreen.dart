@@ -1,14 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/screens/locationError.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../provider/weatherProvider.dart';
-import '../theme/colors.dart';
 import '../theme/textStyle.dart';
 import '../widgets/WeatherInfoHeader.dart';
 import '../widgets/mainWeatherDetail.dart';

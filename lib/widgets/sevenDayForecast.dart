@@ -3,7 +3,6 @@ import 'package:flutter_weather/helper/extensions.dart';
 import 'package:flutter_weather/models/dailyWeather.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/screens/sevenDayForecastDetailScreen.dart';
-import 'package:flutter_weather/theme/colors.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
 import 'package:flutter_weather/widgets/customShimmer.dart';
 import 'package:intl/intl.dart';
@@ -45,8 +44,7 @@ class SevenDayForecast extends StatelessWidget {
                     onPressed: weatherProv.isLoading
                         ? null
                         : () {
-                            Navigator.of(context)
-                                .pushNamed(SevenDayForecastDetail.routeName);
+                            Navigator.of(context).pushNamed(SevenDayForecastDetail.routeName);
                           },
                   );
                 },
@@ -76,74 +74,74 @@ class SevenDayForecast extends StatelessWidget {
                 itemCount: weatherProv.dailyWeather.length,
                 itemBuilder: (context, index) {
                   final DailyWeather weather = weatherProv.dailyWeather[index];
-                  return Material(
-                    borderRadius: BorderRadius.circular(12.0),
-                    color: index.isEven
-                        ? Theme.of(context).colorScheme.background
-                        : Theme.of(context).colorScheme.surface,
-                    child: InkWell(
+                  return Builder(builder: (innerContext) {
+                    final color = index.isEven ? Theme.of(innerContext).colorScheme.secondary : Theme.of(innerContext).colorScheme.surface;
+
+                    return Material(
                       borderRadius: BorderRadius.circular(12.0),
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                          SevenDayForecastDetail.routeName,
-                          arguments: index,
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.sizeOf(context).width / 4,
-                              child: FittedBox(
-                                alignment: Alignment.centerLeft,
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  index == 0
-                                      ? 'Today'
-                                      : DateFormat('EEEE').format(weather.date),
-                                  style: semiboldText(context),
-                                  maxLines: 1,
-                                ),
-                              ),
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 36.0,
-                                  width: 36.0,
-                                  child: Image.asset(
-                                    getWeatherImage(weather.weatherCategory),
-                                    fit: BoxFit.cover,
+                      color: color,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12.0),
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                            SevenDayForecastDetail.routeName,
+                            arguments: index,
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.sizeOf(context).width / 4,
+                                child: FittedBox(
+                                  alignment: Alignment.centerLeft,
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    index == 0 ? 'Today' : DateFormat('EEEE').format(weather.date),
+                                    style: semiboldText(context),
+                                    maxLines: 1,
                                   ),
                                 ),
-                                const SizedBox(height: 4.0),
-                                Text(
-                                  weather.weatherCategory,
-                                  style: lightText(context),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: MediaQuery.sizeOf(context).width / 5,
-                              child: FittedBox(
-                                alignment: Alignment.centerLeft,
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  weatherProv.isCelsius
-                                      ? '${weather.tempMax.toStringAsFixed(0)}°/${weather.tempMin.toStringAsFixed(0)}°'
-                                      : '${weather.tempMax.toFahrenheit().toStringAsFixed(0)}°/${weather.tempMin.toFahrenheit().toStringAsFixed(0)}°',
-                                  style: semiboldText(context),
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 36.0,
+                                    width: 36.0,
+                                    child: Image.asset(
+                                      getWeatherImage(weather.weatherCategory),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4.0),
+                                  Text(
+                                    weather.weatherCategory,
+                                    style: lightText(context),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                width: MediaQuery.sizeOf(context).width / 5,
+                                child: FittedBox(
+                                  alignment: Alignment.centerLeft,
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    weatherProv.isCelsius
+                                        ? '${weather.tempMax.toStringAsFixed(0)}°/${weather.tempMin.toStringAsFixed(0)}°'
+                                        : '${weather.tempMax.toFahrenheit().toStringAsFixed(0)}°/${weather.tempMin.toFahrenheit().toStringAsFixed(0)}°',
+                                    style: semiboldText(context),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
+                    );
+                  });
                 },
               );
             },

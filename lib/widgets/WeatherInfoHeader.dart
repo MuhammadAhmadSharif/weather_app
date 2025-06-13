@@ -1,7 +1,6 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
-import 'package:flutter_weather/theme/colors.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
 import 'package:flutter_weather/widgets/customShimmer.dart';
 import 'package:intl/intl.dart';
