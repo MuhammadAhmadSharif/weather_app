@@ -24,37 +24,69 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.light,
-          primaryColor: primaryBlue,
-          scaffoldBackgroundColor: Colors.white,
-          appBarTheme: AppBarTheme(
-            backgroundColor: Colors.white,
-            iconTheme: IconThemeData(color: Colors.blue),
+          useMaterial3: true,
+          primaryColor: seedBlue,
+          scaffoldBackgroundColor: surfaceWhite,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.transparent,
+            foregroundColor: ink,
             elevation: 0,
+            centerTitle: false,
           ),
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          colorScheme: ColorScheme.light(
-            primary: primaryBlue,
-            secondary: backgroundWhite,
-            surface: backgroundBlue,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: seedBlue,
+            primary: seedBlue,
+            secondary: skyBlue,
+            surface: surfaceWhite,
+            background: surfaceMuted,
+            onPrimary: Colors.white,
+            onSurface: ink,
           ),
-          textTheme: GoogleFonts.openSansTextTheme().apply(bodyColor: Colors.black),
+          dividerTheme:
+              const DividerThemeData(color: outlineSoft, thickness: 1),
+          cardTheme: CardThemeData(
+            color: surfaceWhite,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+          ),
+          textTheme: GoogleFonts.manropeTextTheme().apply(bodyColor: ink),
         ),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
-          primaryColor: primaryBlue,
-          scaffoldBackgroundColor: Colors.black,
-          appBarTheme: AppBarTheme(
-            backgroundColor: Colors.black,
-            iconTheme: IconThemeData(color: Colors.white),
+          useMaterial3: true,
+          primaryColor: seedBlue,
+          scaffoldBackgroundColor: const Color(0xFF0A1224),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.transparent,
+            foregroundColor: Colors.white,
             elevation: 0,
+            centerTitle: false,
           ),
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          colorScheme: ColorScheme.dark(
-            primary: primaryBlue,
-            secondary: Colors.black,
-            surface: Colors.grey.shade800,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: seedBlue,
+            brightness: Brightness.dark,
+            primary: seedBlue,
+            secondary: skyBlue,
+            surface: const Color(0xFF101B33),
+            background: const Color(0xFF0A1224),
+            onPrimary: Colors.white,
+            onSurface: Colors.white,
           ),
-          textTheme: GoogleFonts.openSansTextTheme().apply(bodyColor: Colors.white),
+          dividerTheme:
+              const DividerThemeData(color: Color(0xFF203052), thickness: 1),
+          cardTheme: CardThemeData(
+            color: const Color(0xFF101B33),
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+          ),
+          textTheme:
+              GoogleFonts.manropeTextTheme().apply(bodyColor: Colors.white),
         ),
         themeMode: ThemeMode.system,
         home: HomeScreen(),

@@ -7,8 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class WeatherInfoHeader extends StatelessWidget {
-  static const double boxWidth = 52.0;
-  static const double boxHeight = 40.0;
   @override
   Widget build(BuildContext context) {
     return Consumer<WeatherProvider>(
@@ -49,142 +47,107 @@ class WeatherInfoHeader extends StatelessWidget {
                         const SizedBox(height: 4.0),
                         FittedBox(
                           child: Text(
-                            DateFormat('EEEE MMM dd, y  hh:mm a')
+                            DateFormat('EEE, MMM d • h:mm a')
                                 .format(DateTime.now()),
                             style: regularText(context)
-                                .copyWith(color: Colors.grey.shade700),
+                                .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                ),
                           ),
                         )
                       ],
                     ),
                   ),
             const SizedBox(width: 8.0),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
-              child: Container(
-                padding: const EdgeInsets.all(4.0),
-                color: Colors.grey.shade200,
-                child: Stack(
-                  children: [
-                    AnimatedSwitcher(
-                      duration: Duration(milliseconds: 150),
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                        return SlideTransition(
-                          position: Tween<Offset>(
-                            begin: weatherProv.isCelsius
-                                ? Offset(1.0, 0.0)
-                                : Offset(-1.0, 0.0),
-                            end: Offset(0.0, 0.0),
-                          ).animate(animation),
-                          child: child,
-                        );
-                      },
-                      child: weatherProv.isCelsius
-                          ? GestureDetector(
-                              key: ValueKey<int>(0),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    height: boxHeight,
-                                    width: boxWidth,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      color: weatherProv.isLoading
-                                          ? Colors.grey
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                    ),
-                                  ),
-                                  Container(
-                                    height: boxHeight,
-                                    width: boxWidth,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      color: Colors.grey.shade200,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onTap: () => weatherProv.isLoading
-                                  ? null
-                                  : weatherProv.switchTempUnit(),
-                            )
-                          : GestureDetector(
-                              key: ValueKey<int>(1),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    height: boxHeight,
-                                    width: boxWidth,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      color: Colors.grey.shade200,
-                                    ),
-                                  ),
-                                  Container(
-                                    height: boxHeight,
-                                    width: boxWidth,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      color: weatherProv.isLoading
-                                          ? Colors.grey
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onTap: () => weatherProv.switchTempUnit(),
-                            ),
-                    ),
-                    IgnorePointer(
-                      child: Row(
-                        children: [
-                          Container(
-                            height: boxHeight,
-                            width: boxWidth,
-                            alignment: Alignment.center,
-                            child: Text(
-                              '°C',
-                              style: semiboldText(context).copyWith(
-                                fontSize: 16,
-                                color: weatherProv.isCelsius
-                                    ? Colors.white
-                                    : Colors.grey.shade600,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: boxHeight,
-                            width: boxWidth,
-                            alignment: Alignment.center,
-                            child: Text(
-                              '°F',
-                              style: semiboldText(context).copyWith(
-                                fontSize: 16,
-                                color: weatherProv.isCelsius
-                                    ? Colors.grey.shade600
-                                    : Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
+            _UnitToggle(
+              isCelsius: weatherProv.isCelsius,
+              isLoading: weatherProv.isLoading,
+              onToggle: () => weatherProv.switchTempUnit(),
+            ),
           ],
         );
       },
+    );
+  }
+}
+
+class _UnitToggle extends StatelessWidget {
+  final bool isCelsius;
+  final bool isLoading;
+  final VoidCallback onToggle;
+  const _UnitToggle({
+    required this.isCelsius,
+    required this.isLoading,
+    required this.onToggle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: isLoading ? null : onToggle,
+      child: Container(
+        height: 40,
+        width: 120,
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: Theme.of(context).dividerColor,
+          ),
+        ),
+        child: Stack(
+          children: [
+            AnimatedAlign(
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOut,
+              alignment:
+                  isCelsius ? Alignment.centerLeft : Alignment.centerRight,
+              child: Container(
+                width: 54,
+                decoration: BoxDecoration(
+                  color: isLoading
+                      ? Theme.of(context).dividerColor
+                      : Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: 54,
+                  child: Center(
+                    child: Text(
+                      '°C',
+                      style: semiboldText(context).copyWith(
+                        fontSize: 14,
+                        color: isCelsius ? Colors.white : Colors.grey.shade600,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 54,
+                  child: Center(
+                    child: Text(
+                      '°F',
+                      style: semiboldText(context).copyWith(
+                        fontSize: 14,
+                        color: isCelsius ? Colors.grey.shade600 : Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

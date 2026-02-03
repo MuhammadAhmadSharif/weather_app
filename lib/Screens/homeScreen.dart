@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../provider/weatherProvider.dart';
+import '../theme/colors.dart';
 import '../theme/textStyle.dart';
 import '../widgets/WeatherInfoHeader.dart';
 import '../widgets/mainWeatherDetail.dart';
@@ -47,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Consumer<WeatherProvider>(
         builder: (context, weatherProv, _) {
           // if (!weatherProv.isLoading && !weatherProv.isLocationserviceEnabled)
@@ -63,35 +65,66 @@ class _HomeScreenState extends State<HomeScreen> {
           // if (weatherProv.isSearchError) return SearchErrorDisplay(fsc: fsc);
 
           try {
-            return Stack(
-              children: [
-                ListView(
-                  physics: BouncingScrollPhysics(),
-                  padding: const EdgeInsets.all(12.0).copyWith(
-                    top: kToolbarHeight +
-                        MediaQuery.viewPaddingOf(context).top +
-                        24.0,
+            return Container(
+              decoration: BoxDecoration(
+                gradient: Theme.of(context).brightness == Brightness.dark
+                    ? appBackgroundGradientDark
+                    : appBackgroundGradient,
+              ),
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: -120,
+                    right: -80,
+                    child: _AccentOrb(
+                      size: 260,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondary
+                          .withOpacity(0.35),
+                    ),
                   ),
-                  children: [
-                    WeatherInfoHeader(),
-                    const SizedBox(height: 16.0),
-                    MainWeatherInfo(),
-                    const SizedBox(height: 16.0),
-                    MainWeatherDetail(),
-                    const SizedBox(height: 24.0),
-                    TwentyFourHourForecast(),
-                    const SizedBox(height: 18.0),
-                    SevenDayForecast(),
-                  ],
-                ),
-                CustomSearchBar(fsc: fsc),
-              ],
+                  Positioned(
+                    bottom: -160,
+                    left: -120,
+                    child: _AccentOrb(
+                      size: 320,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.15),
+                    ),
+                  ),
+                  ListView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.all(16.0).copyWith(
+                      top: kToolbarHeight +
+                          MediaQuery.viewPaddingOf(context).top +
+                          28.0,
+                    ),
+                    children: [
+                      WeatherInfoHeader(),
+                      const SizedBox(height: 18.0),
+                      MainWeatherInfo(),
+                      const SizedBox(height: 18.0),
+                      MainWeatherDetail(),
+                      const SizedBox(height: 24.0),
+                      TwentyFourHourForecast(),
+                      const SizedBox(height: 18.0),
+                      SevenDayForecast(),
+                      const SizedBox(height: 12.0),
+                    ],
+                  ),
+                  CustomSearchBar(fsc: fsc),
+                ],
+              ),
             );
           } catch (e, stack) {
             print("Error in HomeScreen build: $e");
             print(stack);
-            return Center(
-                child: Text('Unexpected error occurred. Check console.'));
+            return const Center(
+              child: Text('Unexpected error occurred. Check console.'),
+            );
           }
         },
       ),
@@ -124,17 +157,19 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   Widget build(BuildContext context) {
     return FloatingSearchBar(
       controller: widget.fsc,
-      hint: 'Search...',
+      hint: 'Search city',
       clearQueryOnClose: false,
       scrollPadding: const EdgeInsets.only(top: 16.0, bottom: 56.0),
       transitionDuration: const Duration(milliseconds: 400),
-      borderRadius: BorderRadius.circular(16.0),
+      borderRadius: BorderRadius.circular(24.0),
       transitionCurve: Curves.easeInOut,
       accentColor: Theme.of(context).colorScheme.primary,
       hintStyle: regularText(context),
       queryStyle: regularText(context),
       physics: const BouncingScrollPhysics(),
-      elevation: 2.0,
+      elevation: 0.0,
+      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.9),
+      backdropColor: Colors.transparent,
       debounceDelay: const Duration(milliseconds: 500),
       onQueryChanged: (query) {},
       onSubmitted: (query) async {
@@ -169,10 +204,11 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       ],
       builder: (context, transition) {
         return ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(18.0),
           child: Material(
-            color: Colors.white,
-            elevation: 4.0,
+            color: Theme.of(context).colorScheme.surface,
+            elevation: 6.0,
+            shadowColor: Colors.black.withOpacity(0.08),
             child: ListView.separated(
               shrinkWrap: true,
               physics: BouncingScrollPhysics(),
@@ -188,7 +224,10 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                         .searchWeather(data, context);
                   },
                   child: Container(
-                    padding: const EdgeInsets.all(22.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 16.0,
+                    ),
                     color: Theme.of(context).colorScheme.surface,
                     child: Row(
                       children: [
@@ -203,11 +242,38 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
               separatorBuilder: (context, index) => Divider(
                 thickness: 1.0,
                 height: 0.0,
+                color: Theme.of(context).dividerColor,
               ),
             ),
           ),
         );
       },
+    );
+  }
+}
+
+class _AccentOrb extends StatelessWidget {
+  final double size;
+  final Color color;
+  const _AccentOrb({
+    required this.size,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: size,
+      width: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: [
+            color,
+            color.withOpacity(0.0),
+          ],
+        ),
+      ),
     );
   }
 }

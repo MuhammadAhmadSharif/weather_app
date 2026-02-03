@@ -21,10 +21,20 @@ class MainWeatherDetail extends StatelessWidget {
         );
       }
       return Container(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 12.0),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.background,
-          borderRadius: BorderRadius.circular(16.0),
+          color: Theme.of(context).colorScheme.surface.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(20.0),
+          border: Border.all(
+            color: Theme.of(context).dividerColor,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 18,
+              offset: const Offset(0, 12),
+            ),
+          ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -37,7 +47,7 @@ class MainWeatherDetail extends StatelessWidget {
                     DetailInfoTile(
                         icon: PhosphorIcon(
                           PhosphorIconsRegular.thermometerSimple,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                         title: 'Feels Like',
                         data: weatherProv.isCelsius
@@ -47,12 +57,12 @@ class MainWeatherDetail extends StatelessWidget {
                       thickness: 1.0,
                       indent: 4.0,
                       endIndent: 4.0,
-                      color: Theme.of(context).colorScheme.surface,
+                      color: Theme.of(context).dividerColor,
                     ),
                     DetailInfoTile(
                       icon: PhosphorIcon(
                         PhosphorIconsRegular.drop,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       title: 'Precipitation',
                       data:
@@ -62,12 +72,12 @@ class MainWeatherDetail extends StatelessWidget {
                       thickness: 1.0,
                       indent: 4.0,
                       endIndent: 4.0,
-                      color: Theme.of(context).colorScheme.surface,
+                      color: Theme.of(context).dividerColor,
                     ),
                     DetailInfoTile(
                       icon: PhosphorIcon(
                         PhosphorIconsRegular.sun,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       title: 'UV Index',
                       data: uviValueToString(
@@ -80,7 +90,7 @@ class MainWeatherDetail extends StatelessWidget {
             ),
             Divider(
               thickness: 1.0,
-              color: Theme.of(context).colorScheme.surface,
+              color: Theme.of(context).dividerColor,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -90,7 +100,7 @@ class MainWeatherDetail extends StatelessWidget {
                     DetailInfoTile(
                       icon: PhosphorIcon(
                         PhosphorIconsRegular.wind,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       title: 'Wind',
                       data: '${weatherProv.weather?.windSpeed} m/s',
@@ -99,12 +109,12 @@ class MainWeatherDetail extends StatelessWidget {
                       thickness: 1.0,
                       indent: 4.0,
                       endIndent: 4.0,
-                      color: Theme.of(context).colorScheme.surface,
+                      color: Theme.of(context).dividerColor,
                     ),
                     DetailInfoTile(
                       icon: PhosphorIcon(
                         PhosphorIconsRegular.dropHalfBottom,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       title: 'Humidity',
                       data: '${weatherProv.weather?.humidity}%',
@@ -113,12 +123,12 @@ class MainWeatherDetail extends StatelessWidget {
                       thickness: 1.0,
                       indent: 4.0,
                       endIndent: 4.0,
-                      color: Theme.of(context).colorScheme.surface,
+                      color: Theme.of(context).dividerColor,
                     ),
                     DetailInfoTile(
                       icon: PhosphorIcon(
                         PhosphorIconsRegular.cloud,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                       title: 'Cloudiness',
                       data: '${weatherProv.additionalWeatherData.clouds}%',
@@ -151,16 +161,27 @@ class DetailInfoTile extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircleAvatar(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              child: icon),
+          Container(
+            height: 36,
+            width: 36,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(child: icon),
+          ),
           const SizedBox(width: 8.0),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                FittedBox(child: Text(title, style: lightText(context))),
+                FittedBox(
+                  child: Text(
+                    title,
+                    style: lightText(context).copyWith(fontSize: 12),
+                  ),
+                ),
                 FittedBox(
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(minWidth: 1.0),
